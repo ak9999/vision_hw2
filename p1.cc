@@ -26,17 +26,16 @@ int main(int argc, char ** argv)
 	const string output(argv[3]);
 
 	Image img;
-
+	if (!ReadImage(input, &img)) {
+		cout << "Can\'t read file " << input << endl;
+		return 0;
+	}
+	
 	/*
 	 * To make this truly binary, I will only use 2 gray levels (0 and 1).
 	 * 0 = black, 1 = white
 	 */
 	img.SetNumberGrayLevels(1);
-
-	if (!ReadImage(input, &img)) {
-		cout << "Can\'t read file " << input << endl;
-		return 0;
-	}
 
 	int rows = img.num_rows();
 	int cols = img.num_columns();
