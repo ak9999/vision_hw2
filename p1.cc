@@ -13,7 +13,7 @@ using namespace ComputerVisionProjects;
 
 int main(int argc, char ** argv)
 {
-	// Best threshold is 125.
+	// My chosen threshold is 125, though 120-125 produce similar results.
 	if (argc != 4) {
 		cout <<
 		"Usage: " << argv[0] << " <input_image.pgm> <threshold> <output_image.pgm>"
@@ -22,10 +22,17 @@ int main(int argc, char ** argv)
 	}
 
 	const string input(argv[1]);
-	const float threshold = atof(argv[2]);
+	const int threshold = atof(argv[2]);
 	const string output(argv[3]);
 
 	Image img;
+
+	/*
+	 * To make this truly binary, I will only use 2 gray levels (0 and 1).
+	 * 0 = black, 1 = white
+	 */
+	img.SetNumberGrayLevels(1);
+
 	if (!ReadImage(input, &img)) {
 		cout << "Can\'t read file " << input << endl;
 		return 0;
@@ -33,8 +40,6 @@ int main(int argc, char ** argv)
 
 	int rows = img.num_rows();
 	int cols = img.num_columns();
-
-	img.SetNumberGrayLevels(1);
 
 	for (int i = 0; i < rows; i++)
 	{
