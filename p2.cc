@@ -6,7 +6,13 @@
 #include <iostream>
 #include <string>
 #include <cstdlib> // for std::atof
+#include <vector>
 #include "image.h"
+
+// Boost libs
+#include <boost/pending/disjoint_sets.hpp> // boost::disjoint_sets
+#include <boost/unordered/unordered_set.hpp> // boost::unordered_set
+
 
 using namespace std;
 using namespace ComputerVisionProjects;
@@ -23,6 +29,10 @@ int main(int argc, char ** argv)
 		return 0;
 	}
 
+	// Using-declarations
+	using std::vector<int> = VecInt;
+	using boost::unordered_set<int> = SetInt;
+
 	const string input(argv[1]);
 	const string output(argv[2]);
 
@@ -32,23 +42,40 @@ int main(int argc, char ** argv)
 		return 0;
 	}
 
+	int label = 1;
 	int rows = img.num_rows();
 	int cols = img.num_columns();
 
-}
+	VecInt rank(rows*cols);
+	VecInt parent(rows*cols);
+	SetInt elements;
 
-void search(int x, int y, int label)
-{
-	if (x < 0 || x == rows) return; // out of range
-	if (y < 0 || y == cols) return; // out of range
-	if (label[x][y] || !m[x][y]) return; // Labeled
-}
+	boost::disjoint_sets<int, int> ds(rank[0], parent[0]);
 
-void find_components(int rows, int cols)
-{
-	int comp = 0;
-	for (int i = 0; i < rows; i++)
-		for (int j = 0; j < cols; j++)
-			if (!label[i][j] && m[i][j])
-				search(i, j, ++component);
+	for (size_t c = 0; c < cols; c++)
+	{
+		for (size_t r = 0; r < rows; r++)
+		{
+			// If pixel isn't white, don't do anything.
+			if (img.GetPixel(r, c) != 0)
+			{
+				// Pixel above current position and pixel to the left of current position
+				// both have no labels.
+				if (img.GetPixel(r-1, c) == 0 && img.GetPixel(r, c-1) == 0)
+					img.SetPixel(r, c, label++);
+				// Label above is non-zero, label to the left is zero. Take above label.
+				if (img.GetPixel(r-1, c) != 0 && img.GetPixel(r, c-1) == 0)
+					img.SetPixel(r, c, img.GetPixel(r-1, c));
+				// Label to the left is non-zero, take it.
+				if (img.GetPixel(r, c-1) != 0 && img.GetPixel(r-1, c) == 0)
+					img.SetPixel(r, c, img.GetPixel(r, c-1));
+				// Both are non-zero, arbitrarily take the above label.
+				if (img.GetPixel(r, c-1) != 0 && img.GetPixel(r-1, c) != 0)
+					img.SetPixel(r, c, img.GetPixel(r-1, c));
+				/* The left and above labels are equivalent and I need to record this */
+			}
+		}
+	}
+
+	
 }
