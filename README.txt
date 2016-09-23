@@ -32,5 +32,6 @@ III. Run Instructions
         * This will also delete the compiled programs.
 
 IV. Input and Output Files
-    - Input: two_objects.pgm
+    - PGM images.
+    - Input: User defined.
     - Output: User defined.
