@@ -1,14 +1,3 @@
-########################################
-##
-## Makefile
-## LINUX compilation
-##
-##############################################
-
-
-
-
-
 #FLAGS
 C++FLAG = -g -std=c++14 -Wall -pedantic
 
@@ -27,24 +16,24 @@ INCLUDES=  -I.
 #-->All libraries (without LEDA)
 LIBS_ALL =  -L/usr/lib -L/usr/local/lib
 
+p1_obj=image.o p1.o
 
-#First Program (ListTest)
-
-Cpp_OBJ=image.o p1.o
+p2_obj=image.o p2.o
 
 PROGRAM1=p1
 PROGRAM2=p2
 PROGRAM3=p3
 PROGRAM4=p4
 
-$(PROGRAM1): $(Cpp_OBJ)
+all: $(PROGRAM1) $(PROGRAM2)
+
+$(PROGRAM1): $(p1_obj)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ) $(INCLUDES) $(LIBS_ALL)
 
-
-all:
-	make $(PROGRAM1)
-
+$(PROGRAM2): $(p2_obj)
+	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(p2_obj) $(INCLUDES) $(LIBS_ALL)
 
 clean:
 	(rm -f *.o;)
 	(rm -f p1;)
+	(rm -f p2;)
