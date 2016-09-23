@@ -28,7 +28,7 @@ PROGRAM4=p4
 all: $(PROGRAM1) $(PROGRAM2)
 
 $(PROGRAM1): $(p1_obj)
-	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(Cpp_OBJ) $(INCLUDES) $(LIBS_ALL)
+	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(p1_obj) $(INCLUDES) $(LIBS_ALL)
 
 $(PROGRAM2): $(p2_obj)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(p2_obj) $(INCLUDES) $(LIBS_ALL)
