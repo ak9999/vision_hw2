@@ -5,20 +5,13 @@
 
 #include <iostream>
 #include <string>
-#include <cstdlib> // for std::atof
 #include <vector>
 #include "image.h"
-
-// Boost libs
-#include <boost/pending/disjoint_sets.hpp> // boost::disjoint_sets
-#include <boost/unordered/unordered_set.hpp> // boost::unordered_set
+#include "DisjSets.h"
 
 
 using namespace std;
 using namespace ComputerVisionProjects;
-
-void search(int x, int y, int label);
-void find_components();
 
 int main(int argc, char ** argv)
 {
@@ -29,10 +22,6 @@ int main(int argc, char ** argv)
 		return 0;
 	}
 
-	// Using-declarations
-	using std::vector<int> = VecInt;
-	using boost::unordered_set<int> = SetInt;
-
 	const string input(argv[1]);
 	const string output(argv[2]);
 
@@ -42,21 +31,30 @@ int main(int argc, char ** argv)
 		return 0;
 	}
 
+	// Create disjoint set with size 400. Size doesn't matter too much.
+	DisjSets ds(400);
+
 	int label = 1;
 	int rows = img.num_rows();
 	int cols = img.num_columns();
 
-	VecInt rank(rows*cols);
-	VecInt parent(rows*cols);
-	SetInt elements;
+	/*
+	 * Should be 6 way connected, not 4.
+	 * Only check if pixel is non-zero, this way I don't have to worry about
+	 * being on row 0, col 0.
+	 */
 
-	boost::disjoint_sets<int, int> ds(rank[0], parent[0]);
-
-	for (size_t c = 0; c < cols; c++)
+	// Change this algorithm!
+	for (auto r = 1; r < rows; r++)
 	{
-		for (size_t r = 0; r < rows; r++)
+		for (auto c = 1; c < cols; c++)
 		{
 			// If pixel isn't white, don't do anything.
+			if (r == 0 || c == 0)
+			{
+				if (img.GetPixel(r, c) != 0) img.SetPixel(r, c, label++);
+			}
+
 			if (img.GetPixel(r, c) != 0)
 			{
 				// Pixel above current position and pixel to the left of current position
@@ -71,9 +69,20 @@ int main(int argc, char ** argv)
 					img.SetPixel(r, c, img.GetPixel(r, c-1));
 				// Both are non-zero, arbitrarily take the above label.
 				if (img.GetPixel(r, c-1) != 0 && img.GetPixel(r-1, c) != 0)
+				{
 					img.SetPixel(r, c, img.GetPixel(r-1, c));
-				/* The left and above labels are equivalent and I need to record this */
+					/* The left and above labels are equivalent and I need to record this */
+				}
 			}
 		}
 	}
+
+	img.SetNumberGrayLevels(label);
+
+	if (!WriteImage(output, img)) {
+		cout << "Can\'t write to file." << endl;
+		return 0;
+	}
+
+	return 0;
 }
