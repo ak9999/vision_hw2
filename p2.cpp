@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "image.h"
 #include "DisjSets.h"
 
@@ -29,60 +30,55 @@ int main(int argc, char ** argv)
 	if (!ReadImage(input, &img)) {
 		cout << "Can\'t read file " << input << endl;
 		return 0;
-	}
+	} // Loaded image into memory.
 
 	// Create disjoint set with size 400. Size doesn't matter too much.
-	DisjSets ds(400);
+	DisjointSets ds(400);
 
-	int label = 1;
+	int label = 1; // Start label counter at 1.
 	int rows = img.num_rows();
 	int cols = img.num_columns();
 
-	/*
-	 * Should be 6 way connected, not 4.
-	 * Only check if pixel is non-zero, this way I don't have to worry about
-	 * being on row 0, col 0.
-	 */
-
-	// Change this algorithm!
-	for (auto r = 1; r < rows; r++)
+	// Skipping the first row and first column is a dirty hack.
+	for (auto i = 1; i < rows; i++)
 	{
-		for (auto c = 1; c < cols; c++)
+		for (auto j = 1; j < cols; j++)
 		{
-			// If pixel isn't white, don't do anything.
-			if (r == 0 || c == 0)
-			{
-				if (img.GetPixel(r, c) != 0) img.SetPixel(r, c, label++);
-			}
+			// Pixel locations relative to current position (A).
+			// See Slide 40 of "Binary Images" presentation.
+			int A = img.GetPixel(i, j); // current pixel
+			int B = img.GetPixel(i-1, j); // North
+			int C = img.GetPixel(i, j-1); // West
+			int D = img.GetPixel(i-1, j-1); // North-West
 
-			if (img.GetPixel(r, c) != 0)
+			if (A != 0)
 			{
-				// Pixel above current position and pixel to the left of current position
-				// both have no labels.
-				if (img.GetPixel(r-1, c) == 0 && img.GetPixel(r, c-1) == 0)
-					img.SetPixel(r, c, label++);
-				// Label above is non-zero, label to the left is zero. Take above label.
-				if (img.GetPixel(r-1, c) != 0 && img.GetPixel(r, c-1) == 0)
-					img.SetPixel(r, c, img.GetPixel(r-1, c));
-				// Label to the left is non-zero, take it.
-				if (img.GetPixel(r, c-1) != 0 && img.GetPixel(r-1, c) == 0)
-					img.SetPixel(r, c, img.GetPixel(r, c-1));
-				// Both are non-zero, arbitrarily take the above label.
-				if (img.GetPixel(r, c-1) != 0 && img.GetPixel(r-1, c) != 0)
+				if (B == 0 && C == 0 && D == 0) // First white pixel?
+					img.SetPixel(i, j, label++);
+				if (B == 0 && C == 0 && D != 0) // B and C unlabeled, but D is.
+					img.SetPixel(i, j, D);
+				if (D == 0 && B == 0 && C != 0) // D and B unlabeled, but C is.
+					img.SetPixel(i, j, C);
+				if (C == 0 && D == 0 && B != 0)
+					img.SetPixel(i, j, B);
+				// North and West pixels are equivalent.
+				if (B == C)
+					img.SetPixel(i, j, B);
+				if (B != 0 && C != 0 && B != C)
 				{
-					img.SetPixel(r, c, img.GetPixel(r-1, c));
-					/* The left and above labels are equivalent and I need to record this */
+					img.SetPixel(i, j, min(B, C));
+					ds.UnionSets(B, C);
 				}
 			}
 		}
-	}
+	} // First pass.
 
 	img.SetNumberGrayLevels(label);
 
 	if (!WriteImage(output, img)) {
 		cout << "Can\'t write to file." << endl;
 		return 0;
-	}
+	} // Wrote image to file.
 
 	return 0;
 }
