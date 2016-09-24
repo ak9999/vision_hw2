@@ -7,7 +7,10 @@ EXEC_DIR=.
 
 
 .cc.o:
-	g++ $(C++FLAG) $(INCLUDES)  -c $< -o $@
+	g++ $(C++FLAG) $(INCLUDES) -c $< -o $@
+
+.cpp.o:
+	g++ $(C++FLAG) $(INCLUDES) -c $< -o $@
 
 
 #Including
@@ -37,3 +40,5 @@ clean:
 	(rm -f *.o;)
 	(rm -f p1;)
 	(rm -f p2;)
+	(rm -f p3;)
+	(rm -f p4;)
