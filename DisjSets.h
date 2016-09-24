@@ -16,7 +16,7 @@
 class DisjointSets {
  public:
   explicit DisjointSets(size_t num_elements) {
-    for (int i = 0; i < num_elements; ++i)
+    for (size_t i = 0; i < num_elements; ++i)
       the_sets_.push_back(-1);
   }
 
