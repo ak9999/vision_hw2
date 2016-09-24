@@ -1,37 +1,42 @@
 *************************************************
-Title:          README.txt
-Author:         Abdullah Khan
+Title:		  README.txt
+Author:		 Abdullah Khan
 Date Created:   2016-09-19
-Class:          [CSCI 493.69] Computer Vision
-Professor:      Stamos
-Purpose:        Homework #2
+Class:		  [CSCI 493.69] Computer Vision
+Professor:	  Stamos
+Purpose:		Homework #2
 *************************************************
 
 I. Parts Completed
-    - p1
+	- p1
 
 II. Bugs Encountered
-    - Upon running `make`, the following warnings are shown:
+	- Upon running `make`, the following warnings are shown:
 
-g++ -g -std=c++14 -Wall -pedantic -I.  -c image.cc -o image.o
-image.cc: In function ‘void ComputerVisionProjects::DrawLine(int, int, int, int, int, ComputerVision
-Projects::Image*)’:
-image.cc:152:5: warning: unused variable ‘incrS’ [-Wunused-variable]
-     incrS,
-     ^
-image.cc:154:5: warning: unused variable ‘incrN’ [-Wunused-variable]
-     incrN;     
+	g++ -g -std=c++14 -Wall -pedantic -I. -c image.cc -o image.o
+	image.cc: In function ‘void ComputerVisionProjects::DrawLine(int, int, int, int, int, ComputerVision
+	Projects::Image*)’:
+	image.cc:152:5: warning: unused variable ‘incrS’ [-Wunused-variable]
+		 incrS,
+		 ^
+	image.cc:154:5: warning: unused variable ‘incrN’ [-Wunused-variable]
+		 incrN;
+		 ^
 
 This does not seem to have any effect on the output.
 
-III. Run Instructions
-    - Run `make` to build.
-    - ./p1 <input_image.pgm> <threshold> <output_image.pgm>
+	- The DisjointSets class' explicit constructor compared signed and unsigned
+		types together. This makes the compiler show a warning. I fixed this by
+		changing the for loop in the constructor from initializing an `int` to `size_t`.
 
-    - To clean up directory, run `make clean`.
-        * This will also delete the compiled programs.
+III. Run Instructions
+	- Run `make` to build.
+	- ./p1 <input_image.pgm> <threshold> <output_image.pgm>
+
+	- To clean up directory, run `make clean`.
+		* This will also delete the compiled programs.
 
 IV. Input and Output Files
-    - PGM images.
-    - Input: User defined.
-    - Output: User defined.
+	- PGM images.
+	- Input: User defined.
+	- Output: User defined.
