@@ -44,30 +44,33 @@ int main(int argc, char ** argv)
 	{
 		for (auto j = 1; j < cols; j++)
 		{
-			// Pixel locations relative to current position (A).
-			// See Slide 40 of "Binary Images" presentation.
-			int A = img.GetPixel(i, j); // current pixel
-			int B = img.GetPixel(i-1, j); // North
-			int C = img.GetPixel(i, j-1); // West
-			int D = img.GetPixel(i-1, j-1); // North-West
+			/* Pixel locations relative to current position (A).
+			 * See Slide 40 of "Binary Images" presentation.
+			 * Saving these values also saves computation time.
+			 */
 
-			if (A != 0)
+			int current = img.GetPixel(i, j); // current pixel
+			int north = img.GetPixel(i-1, j); // North
+			int west = img.GetPixel(i, j-1); // West
+			int northwest = img.GetPixel(i-1, j-1); // North-West
+
+			if (current != 0)
 			{
-				if (B == 0 && C == 0 && D == 0) // First white pixel?
+				if (north == 0 && west == 0 && northwest == 0) // First white pixel?
 					img.SetPixel(i, j, label++);
-				if (B == 0 && C == 0 && D != 0) // B and C unlabeled, but D is.
-					img.SetPixel(i, j, D);
-				if (D == 0 && B == 0 && C != 0) // D and B unlabeled, but C is.
-					img.SetPixel(i, j, C);
-				if (C == 0 && D == 0 && B != 0)
-					img.SetPixel(i, j, B);
+				if (north == 0 && west == 0 && northwest != 0) // B and C unlabeled, but D is.
+					img.SetPixel(i, j, northwest);
+				if (northwest == 0 && north == 0 && west != 0) // D and B unlabeled, but C is.
+					img.SetPixel(i, j, west);
+				if (west == 0 && northwest == 0 && north != 0)
+					img.SetPixel(i, j, north);
 				// North and West pixels are equivalent.
-				if (B == C)
-					img.SetPixel(i, j, B);
-				if (B != 0 && C != 0 && B != C)
+				if (north == west)
+					img.SetPixel(i, j, north);
+				if (north != 0 && west != 0 && north != west)
 				{
-					img.SetPixel(i, j, min(B, C));
-					ds.UnionSets(B, C);
+					img.SetPixel(i, j, min(north, west));
+					ds.UnionSets(north, west);
 				}
 			}
 		}
