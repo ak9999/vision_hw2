@@ -63,12 +63,12 @@ int main(int argc, char ** argv)
 				if (northwest == 0 && north == 0 && west == 0)
 				{
 					current = ++label;
-					ds.UnionSets(current, label);
+					ds.UnionSets(current, current);
 				}
 				if ((north != west) && (north != 0 && west != 0))
 				{
 					current = north;
-					ds.UnionSets(north, west);
+					ds.UnionSets(ds.Find(north), ds.Find(west));
 				}
 				img.SetPixel(i, j, current);
 			}
