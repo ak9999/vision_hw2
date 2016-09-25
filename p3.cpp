@@ -16,6 +16,23 @@
 using namespace std;
 using namespace ComputerVisionProjects;
 
+void fillmap(Image &img, size_t &rows, size_t &cols, std::map<int, int> &labels)
+{
+	/* First pass.
+	 * Create associative array based on object.
+	 */
+	for (size_t i = 0; i < rows; i++)
+	{
+		for (size_t j = 0; j < cols; j++)
+		{
+			int currentp = img.GetPixel(i, j);
+			if (currentp != 255) {
+				labels.emplace(img.GetPixel(i, j), 0);
+			}
+		}
+	}
+}
+
 void ObjectCenter(const int label, const int area, int &x, int &y, Image &img)
 {
 	// These will be used as sums.
@@ -58,30 +75,17 @@ int main(int argc, char ** argv)
 	const string database(argv[2]);
 	const string output(argv[3]);
 
-
 	Image img;
 	if (!ReadImage(input, &img)) {
 		cout << "Can\'t read file " << input << endl;
 		return 0;
 	} // Loaded image into memory.
 
-	auto rows = img.num_rows();
-	auto cols = img.num_columns();
+	size_t rows = img.num_rows();
+	size_t cols = img.num_columns();
 	map<int, int> labels;
 
-	/* First pass.
-	 * Create associative array based on object.
-	 */
-	for (size_t i = 0; i < rows; i++)
-	{
-		for (size_t j = 0; j < cols; j++)
-		{
-			int currentp = img.GetPixel(i, j);
-			if (currentp != 255) {
-				labels.emplace(img.GetPixel(i, j), 0);
-			}
-		}
-	}
+	fillmap(img, rows, cols, labels);
 
 	// Get the area.
 	for (size_t i = 0; i < rows; i++)
