@@ -7,8 +7,6 @@
 #include <string>
 #include <vector>
 #include <algorithm> // for std::min
-#include <map> // For resolving conflicts.
-#include <vector> // for labels
 #include "image.h"
 #include "DisjSets.h"
 
