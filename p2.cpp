@@ -70,7 +70,7 @@ int main(int argc, char ** argv)
 					current = north;
 					ds.UnionSets(ds.Find(north), ds.Find(west));
 				}
-				img.SetPixel(i, j, current);
+				img.SetPixel(i, j, ds.Find(current));
 			}
 		}
 	}
@@ -86,7 +86,7 @@ int main(int argc, char ** argv)
 
 	cout << label << endl;
 
-	img.SetNumberGrayLevels(255);
+	img.SetNumberGrayLevels(min(255, label));
 
 	if (!WriteImage(output, img)) {
 		cout << "Can\'t write to file." << endl;
