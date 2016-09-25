@@ -9,19 +9,11 @@ Purpose:		Homework #2
 
 I. Parts Completed
 	- p1
+	- p2
 
 II. Bugs Encountered
-	- Upon running `make`, the following warnings are shown:
-
-	g++ -g -std=c++14 -Wall -pedantic -I. -c image.cc -o image.o
-	image.cc: In function ‘void ComputerVisionProjects::DrawLine(int, int, int, int, int, ComputerVision
-	Projects::Image*)’:
-	image.cc:152:5: warning: unused variable ‘incrS’ [-Wunused-variable]
-		 incrS,
-		 ^
-	image.cc:154:5: warning: unused variable ‘incrN’ [-Wunused-variable]
-		 incrN;
-		 ^
+	- When running p2 on a binary image, some objects are almost as dark as
+		the background.
 
 This does not seem to have any effect on the output.
 
@@ -32,6 +24,8 @@ This does not seem to have any effect on the output.
 III. Run Instructions
 	- Run `make` to build.
 	- ./p1 <input_image.pgm> <threshold> <output_image.pgm>
+		* The best threshold is between 120 and 125. I prefer 125.
+	- ./p2 <input_binary_image.pgm> <output_labeled_image.pgm>
 
 	- To clean up directory, run `make clean`.
 		* This will also delete the compiled programs.
