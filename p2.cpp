@@ -84,8 +84,6 @@ int main(int argc, char ** argv)
 		}
 	}
 
-	cout << label << endl;
-
 	img.SetNumberGrayLevels(min(255, label));
 
 	if (!WriteImage(output, img)) {
