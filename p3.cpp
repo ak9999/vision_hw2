@@ -71,9 +71,12 @@ int main(int argc, char ** argv)
 		}
 	}
 
+	// Print out objects and their respective areas.
 	for (auto l : labels)
 	{
-		cout << "Object Label: " << l.first << endl << "Area: " << l.second << endl;
+		cout << "Object Label: " << l.first << endl
+		<< "Object " << l.first << "\'s "
+		<< "Area: " << l.second << endl;
 		cout << endl;
 	}
 
