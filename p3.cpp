@@ -33,6 +33,24 @@ void fillmap(Image &img, size_t &rows, size_t &cols, std::map<int, int> &labels)
 	}
 }
 
+void findArea(Image &img, size_t &rows, size_t &cols, std::map<int, int> &labels)
+{
+	// Get the area.
+	for (size_t i = 0; i < rows; i++)
+	{
+		for (size_t j = 0; j < cols; j++)
+		{
+			int currentp = img.GetPixel(i, j);
+			if (currentp != 255)
+			{
+				auto label = labels.find(currentp);
+				if (label != labels.end())
+					label->second = label->second + 1;
+			}
+		}
+	}
+}
+
 void ObjectCenter(const int label, const int area, int &x, int &y, Image &img)
 {
 	// These will be used as sums.
@@ -86,21 +104,7 @@ int main(int argc, char ** argv)
 	map<int, int> labels;
 
 	fillmap(img, rows, cols, labels);
-
-	// Get the area.
-	for (size_t i = 0; i < rows; i++)
-	{
-		for (size_t j = 0; j < cols; j++)
-		{
-			int currentp = img.GetPixel(i, j);
-			if (currentp != 255)
-			{
-				auto label = labels.find(currentp);
-				if (label != labels.end())
-					label->second = label->second + 1;
-			}
-		}
-	}
+	findArea(img, rows, cols, labels);
 
 	// Print out objects and their respective areas.
 	for (auto l : labels)
