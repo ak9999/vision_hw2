@@ -6,11 +6,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
-#include <map>
+#include <algorithm> // for std::min
+#include <map> // For resolving conflicts.
+#include <vector> // for labels
 #include "image.h"
 #include "DisjSets.h"
-
 
 using namespace std;
 using namespace ComputerVisionProjects;
@@ -27,6 +27,7 @@ int main(int argc, char ** argv)
 	const string input(argv[1]);
 	const string output(argv[2]);
 
+
 	Image img;
 	if (!ReadImage(input, &img)) {
 		cout << "Can\'t read file " << input << endl;
@@ -36,20 +37,18 @@ int main(int argc, char ** argv)
 	// Create disjoint set with size 400. Size doesn't matter too much.
 	DisjointSets ds(400);
 
-	int label = 1; // Start label counter at 1.
+	int label = 0; // Start label counter.
 	int rows = img.num_rows();
 	int cols = img.num_columns();
 
-	// Skipping the first row and first column is a dirty hack.
-	for (auto i = 1; i < rows; i++)
-	{
-		for (auto j = 1; j < cols; j++)
-		{
-			/* Pixel locations relative to current position (A).
-			 * See Slide 40 of "Binary Images" presentation.
-			 * Saving these values also saves computation time.
-			 */
+	vector<vector<int>> labels(rows, vector<int> (cols, 0));
 
+	// Skipping the first row and first column is a dirty hack.
+	// First pass.
+	for (int i = 0; i < rows; ++i)
+	{
+		for (int j = 0; j < cols; ++j)
+		{
 			int current = img.GetPixel(i, j); // current pixel
 			int north = img.GetPixel(i-1, j); // North
 			int west = img.GetPixel(i, j-1); // West
@@ -57,25 +56,35 @@ int main(int argc, char ** argv)
 
 			if (current != 0)
 			{
-                if (north == 0 && west == 0 && northwest == 0)
-					img.SetPixel(i, j, label++);
-                if (north == 0 && west == 0 && northwest != 0)
-					img.SetPixel(i, j, northwest);
-                if (northwest == 0 && north == 0 && west != 0)
-					img.SetPixel(i, j, west);
-				if (west == 0 && northwest == 0 && north != 0)
-					img.SetPixel(i, j, north);
-				// North and West pixels are equivalent.
-				if (north == west)
-					img.SetPixel(i, j, north);
-				if (north != 0 && west != 0 && north != west)
+				if (northwest != 0)
+					current = northwest;
+				else if (west == north && north != 0)
+					current = north;
+				else if ((west != 0 && north == 0) || (west == 0 && north !=0))
+					current = max(west, north);
+				else if (northwest == 0 && north == 0 && west == 0)
 				{
-					img.SetPixel(i, j, min(north, west));
+					current = ++label;
+					ds.UnionSets(current, label);
+				}
+				else if ((north != west) && (north != 0 && west != 0))
+				{
+					current = north;
 					ds.UnionSets(north, west);
 				}
+				else { img.SetPixel(i, j, current); }
 			}
 		}
-	} // First pass.
+	}
+
+	// Second pass.
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			img.SetPixel(i, j, ds.Find(img.GetPixel(i, j)));
+		}
+	}
 
 	img.SetNumberGrayLevels(label);
 
