@@ -1,10 +1,10 @@
 *************************************************
-Title:		  README.txt
-Author:		 Abdullah Khan
+Title:          README.txt
+Author:         Abdullah Khan
 Date Created:   2016-09-19
-Class:		  [CSCI 493.69] Computer Vision
-Professor:	  Stamos
-Purpose:		Homework #2
+Class:          [CSCI 493.69] Computer Vision
+Professor:      Stamos
+Purpose:        Homework #2
 *************************************************
 
 I. Parts Completed
