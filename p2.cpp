@@ -37,7 +37,7 @@ int main(int argc, char ** argv)
 	// Create disjoint set with size 400. Size doesn't matter too much.
 	DisjointSets ds(400);
 
-	int label = 0; // Start label counter.
+	int label = 10; // Start label counter.
 	int rows = img.num_rows();
 	int cols = img.num_columns();
 
@@ -63,7 +63,6 @@ int main(int argc, char ** argv)
 				if (northwest == 0 && north == 0 && west == 0)
 				{
 					current = ++label;
-					ds.UnionSets(current, current);
 				}
 				if ((north != west) && (north != 0 && west != 0))
 				{
