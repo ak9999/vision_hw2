@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <algorithm> // for std::min
+#include <set>
 #include "image.h"
 #include "DisjSets.h"
 
@@ -35,7 +36,7 @@ int main(int argc, char ** argv)
 	// Create disjoint set with size 400. Size doesn't matter too much.
 	DisjointSets ds(400);
 
-	int label = 10; // Start label counter.
+	int label = 2; // Start label counter.
 	int rows = img.num_rows();
 	int cols = img.num_columns();
 
@@ -60,7 +61,8 @@ int main(int argc, char ** argv)
 					current = max(west, north);
 				if (northwest == 0 && north == 0 && west == 0)
 				{
-					current = ++label;
+					current = label;
+					label++;
 				}
 				if ((north != west) && (north != 0 && west != 0))
 				{
@@ -82,6 +84,25 @@ int main(int argc, char ** argv)
 	}
 
 	img.SetNumberGrayLevels(min(255, label));
+
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			if (img.GetPixel(i, j) == 0)
+				img.SetPixel(i, j, 255);
+		}
+	}
+
+	set<int> sets;
+
+	for (int i = 0; i < rows; i++)
+		for (int j = 0; j < cols; j++)
+			sets.insert(img.GetPixel(i, j));
+
+	cout << "Size: " << sets.size() << endl;
+	for (auto &s : sets)
+		cout << s << endl;
 
 	if (!WriteImage(output, img)) {
 		cout << "Can\'t write to file." << endl;

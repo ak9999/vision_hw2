@@ -14,6 +14,10 @@ I. Parts Completed
 II. Bugs Encountered
 	- When running p2 on a binary image, some objects are almost as dark as
 		the background.
+		Attempted solution: After first and second pass, I do a third pass
+		changing all the background (0) pixels to (255). The image's grayscale
+		level is changed to the std::min(255, label) in the case that label is
+		larger than 255.
 
 This does not seem to have any effect on the output.
 
