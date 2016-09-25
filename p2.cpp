@@ -104,6 +104,8 @@ int main(int argc, char ** argv)
 	for (auto &s : sets)
 		cout << s << endl;
 
+	cout << "The resulting image should have size-1 objects." << endl;
+
 	if (!WriteImage(output, img)) {
 		cout << "Can\'t write to file." << endl;
 		return 0;
