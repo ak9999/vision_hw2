@@ -51,7 +51,19 @@ void findArea(Image &img, size_t &rows, size_t &cols, std::map<int, int> &labels
 	}
 }
 
-void ObjectCenter(const int label, const int area, int &x, int &y, Image &img)
+void printMap(const std::map<int, int> &labels)
+{
+	// Print out objects and their respective areas.
+	for (auto l : labels)
+	{
+		cout << "Object Label: " << l.first << endl
+		<< "Object " << l.first << "\'s "
+		<< "Area: " << l.second << endl;
+		cout << endl;
+	}
+}
+
+void ObjectCenter(const int label, double area, int &x, int &y, Image &img)
 {
 	// These will be used as sums.
 	int X = 0;
@@ -105,15 +117,7 @@ int main(int argc, char ** argv)
 
 	fillmap(img, rows, cols, labels);
 	findArea(img, rows, cols, labels);
-
-	// Print out objects and their respective areas.
-	for (auto l : labels)
-	{
-		cout << "Object Label: " << l.first << endl
-		<< "Object " << l.first << "\'s "
-		<< "Area: " << l.second << endl;
-		cout << endl;
-	}
+	printMap(labels);
 
 	int xbar = 0;
 	int ybar = 0;
