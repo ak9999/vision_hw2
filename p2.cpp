@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <map>
 #include "image.h"
 #include "DisjSets.h"
 
@@ -56,11 +57,11 @@ int main(int argc, char ** argv)
 
 			if (current != 0)
 			{
-				if (north == 0 && west == 0 && northwest == 0) // First white pixel?
+                if (north == 0 && west == 0 && northwest == 0)
 					img.SetPixel(i, j, label++);
-				if (north == 0 && west == 0 && northwest != 0) // B and C unlabeled, but D is.
+                if (north == 0 && west == 0 && northwest != 0)
 					img.SetPixel(i, j, northwest);
-				if (northwest == 0 && north == 0 && west != 0) // D and B unlabeled, but C is.
+                if (northwest == 0 && north == 0 && west != 0)
 					img.SetPixel(i, j, west);
 				if (west == 0 && northwest == 0 && north != 0)
 					img.SetPixel(i, j, north);
