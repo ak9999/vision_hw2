@@ -38,3 +38,9 @@ p4
 # PGM images
 *.pgm
 
+# IDE files
+*.config
+*.creator
+*.includes
+*.files
+*.creator.user
