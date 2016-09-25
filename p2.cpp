@@ -84,7 +84,9 @@ int main(int argc, char ** argv)
 		}
 	}
 
-	img.SetNumberGrayLevels(10);
+	cout << label << endl;
+
+	img.SetNumberGrayLevels(255);
 
 	if (!WriteImage(output, img)) {
 		cout << "Can\'t write to file." << endl;
