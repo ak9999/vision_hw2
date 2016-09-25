@@ -41,38 +41,36 @@ int main(int argc, char ** argv)
 	int rows = img.num_rows();
 	int cols = img.num_columns();
 
-	vector<vector<int>> labels(rows, vector<int> (cols, 0));
-
-	// Skipping the first row and first column is a dirty hack.
 	// First pass.
-	for (int i = 0; i < rows; ++i)
+	for (int i = 0; i < rows; i++)
 	{
-		for (int j = 0; j < cols; ++j)
+		for (int j = 0; j < cols; j++)
 		{
 			int current = img.GetPixel(i, j); // current pixel
-			int north = img.GetPixel(i-1, j); // North
-			int west = img.GetPixel(i, j-1); // West
-			int northwest = img.GetPixel(i-1, j-1); // North-West
 
-			if (current != 0)
+			if (current == 1)
 			{
+				int north = img.GetPixel(i-1, j); // North
+				int west = img.GetPixel(i, j-1); // West
+				int northwest = img.GetPixel(i-1, j-1); // North-West
+
 				if (northwest != 0)
 					current = northwest;
-				else if (west == north && north != 0)
+				if (west == north && north != 0)
 					current = north;
-				else if ((west != 0 && north == 0) || (west == 0 && north !=0))
+				if ((west != 0 && north == 0) || (west == 0 && north !=0))
 					current = max(west, north);
-				else if (northwest == 0 && north == 0 && west == 0)
+				if (northwest == 0 && north == 0 && west == 0)
 				{
 					current = ++label;
 					ds.UnionSets(current, label);
 				}
-				else if ((north != west) && (north != 0 && west != 0))
+				if ((north != west) && (north != 0 && west != 0))
 				{
 					current = north;
 					ds.UnionSets(north, west);
 				}
-				else { img.SetPixel(i, j, current); }
+				img.SetPixel(i, j, current);
 			}
 		}
 	}
@@ -86,7 +84,7 @@ int main(int argc, char ** argv)
 		}
 	}
 
-	img.SetNumberGrayLevels(label);
+	img.SetNumberGrayLevels(10);
 
 	if (!WriteImage(output, img)) {
 		cout << "Can\'t write to file." << endl;
