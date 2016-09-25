@@ -8,21 +8,48 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
-#include <algorithm> // for std::min
-#include <set> // for counting labels
-#include <map>
-#include <vector> // for labels
+#include <map> // for labels
+#include <list> // For storing database entries.
+#include <fstream>
 #include "image.h"
 
 using namespace std;
 using namespace ComputerVisionProjects;
 
+void ObjectCenter(const int label, const int area, int &x, int &y, Image &img)
+{
+	// These will be used as sums.
+	int X = 0;
+	int Y = 0;
+
+	int r = img.num_rows();
+	int c = img.num_columns();
+
+	for(int i = 0; i < r; i++)
+	{
+		for (int j = 0; j < c; j++)
+		{
+			int current = img.GetPixel(i, j);
+			if (current == label)
+			{
+				// Assuming pixel area is 1.
+				X += i * 1;
+				Y += j * 1;
+			}
+		}
+	}
+
+	// These are our x-bar and y-bar.
+	x = (1 / area) * X;
+	y = (1 / area) * Y;
+}
+
 int main(int argc, char ** argv)
 {
 	if (argc != 4) {
 		cout <<
-		"Usage: " << argv[0] << " <input_labled_image.pgm> <output_database.txt> <output_image.pgm>"
+		"Usage: " << argv[0]
+		<< " <input_labled_image.pgm> <output_database.txt> <output_image.pgm>"
 		<< endl;
 		return 0;
 	}
@@ -78,6 +105,16 @@ int main(int argc, char ** argv)
 		<< "Object " << l.first << "\'s "
 		<< "Area: " << l.second << endl;
 		cout << endl;
+	}
+
+	int xbar = 0;
+	int ybar = 0;
+	list<string> entries;
+
+	for (auto l : labels)
+	{
+		ObjectCenter(l.first, l.second, xbar, ybar, img);
+		cout << "Area: " << l.first << " x: " << xbar << " y: " << ybar << endl;
 	}
 
 	// if (!WriteImage(output, img)) {
