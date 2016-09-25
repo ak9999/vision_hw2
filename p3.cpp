@@ -10,6 +10,8 @@
 #include <string>
 #include <vector>
 #include <algorithm> // for std::min
+#include <set> // for counting labels
+#include <map>
 #include <vector> // for labels
 #include "image.h"
 
@@ -36,14 +38,49 @@ int main(int argc, char ** argv)
 		return 0;
 	} // Loaded image into memory.
 
-	// Do things to image.
+	auto rows = img.num_rows();
+	auto cols = img.num_columns();
+	map<int, int> labels;
 
-	img.SetNumberGrayLevels(255); // Set gray levels to whatever they should be.
+	/* First pass.
+	 * Create associative array based on object.
+	 */
+	for (size_t i = 0; i < rows; i++)
+	{
+		for (size_t j = 0; j < cols; j++)
+		{
+			int currentp = img.GetPixel(i, j);
+			if (currentp != 255) {
+				labels.emplace(img.GetPixel(i, j), 0);
+			}
+		}
+	}
 
-	if (!WriteImage(output, img)) {
-		cout << "Can\'t write to file." << endl;
-		return 0;
-	} // Wrote image to file.
+	// Get the area.
+	for (size_t i = 0; i < rows; i++)
+	{
+		for (size_t j = 0; j < cols; j++)
+		{
+			int currentp = img.GetPixel(i, j);
+			if (currentp != 255)
+			{
+				auto label = labels.find(currentp);
+				if (label != labels.end())
+					label->second = label->second + 1;
+			}
+		}
+	}
+
+	for (auto l : labels)
+	{
+		cout << "Object Label: " << l.first << endl << "Area: " << l.second << endl;
+		cout << endl;
+	}
+
+	// if (!WriteImage(output, img)) {
+	// 	cout << "Can\'t write to file." << endl;
+	// 	return 0;
+	// } // Wrote image to file.
 
 	return 0;
 }
