@@ -94,17 +94,17 @@ int main(int argc, char ** argv)
 		}
 	}
 
-	set<int> sets;
+	set<int> labels;
 
 	for (int i = 0; i < rows; i++)
 		for (int j = 0; j < cols; j++)
-			sets.insert(img.GetPixel(i, j));
+			labels.insert(img.GetPixel(i, j));
 
-	cout << "Size: " << sets.size() << endl;
-	for (auto &s : sets)
+	cout << "Size: " << labels.size() << endl;
+	for (auto &s : labels)
 		cout << s << endl;
 
-	cout << "The resulting image should have size-1 objects." << endl;
+	cout << "The resulting image should have " << labels.size() - 1  << " objects." << endl;
 
 	if (!WriteImage(output, img)) {
 		cout << "Can\'t write to file." << endl;
