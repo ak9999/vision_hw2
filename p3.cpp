@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <string>
+#include <cmath>
 #include <map> // for labels
 #include <list> // For storing database entries.
 #include <fstream>
@@ -91,6 +92,30 @@ void ObjectCenter(const int label, double area, int &x, int &y, Image &img)
 	y = (1 / area) * Y;
 }
 
+void GetABC(const int label, double area, int &x, int &y, Image &img, double &a, double &b, double &c)
+{
+	// Adapted from Chapter 10, page 126 of Horn and Winston's Lisp.
+	int sum_a = 0; int sum_b = 0; int sum_c = 0;
+	int rows = img.num_rows(); int cols = img.num_columns();
+
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			if (label == img.GetPixel(i, j))
+			{
+				sum_a += pow(i, 2) * label;
+				sum_b += i * j * label;
+				sum_c += pow(j, 2) * label;
+			}
+		}
+	}
+
+	a = sum_a - area * pow(x, 2);
+	b = 2.0 * sum_b - 2.0 * area * x * y;
+	c = sum_c - area * pow(y, 2);
+}
+
 int main(int argc, char ** argv)
 {
 	if (argc != 4) {
@@ -111,6 +136,8 @@ int main(int argc, char ** argv)
 		return 0;
 	} // Loaded image into memory.
 
+	Image output_image(img); // Copy our loaded image.
+
 	size_t rows = img.num_rows();
 	size_t cols = img.num_columns();
 	map<int, int> labels;
@@ -121,12 +148,24 @@ int main(int argc, char ** argv)
 
 	int xbar = 0;
 	int ybar = 0;
-	list<string> entries;
+	double a = 0; double b = 0; double c = 0;
 
 	for (auto l : labels)
 	{
+		double theta = 0;
 		ObjectCenter(l.first, l.second, xbar, ybar, img);
-		cout << "Area: " << l.first << " x: " << xbar << " y: " << ybar << endl;
+		// Print debug info.
+		cout << "Label: " << l.first << " x: " << xbar << " y: " << ybar << endl;
+
+		GetABC(l.first, l.second, xbar, ybar, img, a, b, c);
+		cout << "Label: " << l.first << " a: " << a
+		<< " b: " << b << " c: " << c << " atan2: " << atan2(b, a-c) << endl;
+		theta = atan2(b, a-c) / 2.0;
+		cout << "Theta: " << theta << endl;
+		double E = (0.5 * (a + c)) - (0.5 * (a - c)) * (2.0 * pow(cos(theta), 2) - 1) - (0.5 * b * 2.0 * sin(theta) * cos(theta));
+		cout << "Emin: " << E << endl << endl;
+
+		// DrawLine(xbar, ybar, xbar + E * cos(theta), ybar + E * sin(theta), 0, &img);
 	}
 
 	// if (!WriteImage(output, img)) {
