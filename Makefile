@@ -1,5 +1,7 @@
+# Makefile edited by Abdullah Khan
+
 #FLAGS
-C++FLAG = -g -std=c++14 -Wall -pedantic
+C++FLAGS = -g -std=c++14 -Wall -pedantic
 
 MATH_LIBS = -lm
 
@@ -7,10 +9,10 @@ EXEC_DIR=.
 
 
 .cc.o:
-	g++ $(C++FLAG) $(INCLUDES) -c $< -o $@
+	g++ $(C++FLAGS) $(INCLUDES) -c $< -o $@
 
 .cpp.o:
-	g++ $(C++FLAG) $(INCLUDES) -c $< -o $@
+	g++ $(C++FLAGS) $(INCLUDES) -c $< -o $@
 
 
 #Including
@@ -32,16 +34,16 @@ PROGRAM4=p4
 all: $(PROGRAM1) $(PROGRAM2) $(PROGRAM3) $(PROGRAM4)
 
 $(PROGRAM1): $(p1_obj)
-	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(p1_obj) $(INCLUDES) $(LIBS_ALL)
+	g++ $(C++FLAGS) -o $(EXEC_DIR)/$@ $(p1_obj) $(INCLUDES) $(LIBS_ALL)
 
 $(PROGRAM2): $(p2_obj)
-	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(p2_obj) $(INCLUDES) $(LIBS_ALL)
+	g++ $(C++FLAGS) -o $(EXEC_DIR)/$@ $(p2_obj) $(INCLUDES) $(LIBS_ALL)
 
 $(PROGRAM3): $(p3_obj)
-	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(p3_obj) $(INCLUDES) $(LIBS_ALL)
+	g++ $(C++FLAGS) -o $(EXEC_DIR)/$@ $(p3_obj) $(INCLUDES) $(LIBS_ALL)
 
 $(PROGRAM4): $(p4_obj)
-	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(p4_obj) $(INCLUDES) $(LIBS_ALL)
+	g++ $(C++FLAGS) -o $(EXEC_DIR)/$@ $(p4_obj) $(INCLUDES) $(LIBS_ALL)
 
 package:
 	(zip KHAN_HW2.zip *.h *.cc *.cpp Makefile README.txt)
