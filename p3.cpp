@@ -122,7 +122,7 @@ int main(int argc, char ** argv)
 	if (argc != 3) {
 		cout <<
 		"Usage: " << argv[0]
-		<< " <input_labled_image.pgm> <output_database.txt> <output_image.pgm>"
+		<< " <input_labeled_image.pgm> <output_database.txt> <output_image.pgm>"
 		<< endl;
 		return 0;
 	}
