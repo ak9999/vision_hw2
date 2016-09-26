@@ -136,8 +136,6 @@ int main(int argc, char ** argv)
 		return 0;
 	} // Loaded image into memory.
 
-	Image output_image(img); // Copy our loaded image.
-
 	size_t rows = img.num_rows();
 	size_t cols = img.num_columns();
 	map<int, int> labels;
@@ -154,24 +152,26 @@ int main(int argc, char ** argv)
 	{
 		double theta = 0;
 		ObjectCenter(l.first, l.second, xbar, ybar, img);
-		// Print debug info.
-		cout << "Label: " << l.first << " x: " << xbar << " y: " << ybar << endl;
-
 		GetABC(l.first, l.second, xbar, ybar, img, a, b, c);
+		theta = atan2(b, a-c) / 2.0;
+		double E = (0.5 * (a + c)) - (0.5 * (a - c)) * (2.0 * pow(cos(theta), 2) - 1) - (0.5 * b * 2.0 * sin(theta) * cos(theta));
+
+		// Print debug info.
+		cout << "Label: " << l.first << " Centered at (x,y): (" << xbar << ", " << ybar << ")" << endl;
 		cout << "Label: " << l.first << " a: " << a
 		<< " b: " << b << " c: " << c << " atan2: " << atan2(b, a-c) << endl;
-		theta = atan2(b, a-c) / 2.0;
 		cout << "Theta: " << theta << endl;
-		double E = (0.5 * (a + c)) - (0.5 * (a - c)) * (2.0 * pow(cos(theta), 2) - 1) - (0.5 * b * 2.0 * sin(theta) * cos(theta));
 		cout << "Emin: " << E << endl << endl;
 
 		// DrawLine(xbar, ybar, xbar + E * cos(theta), ybar + E * sin(theta), 0, &img);
 	}
 
-	// if (!WriteImage(output, img)) {
-	// 	cout << "Can\'t write to file." << endl;
-	// 	return 0;
-	// } // Wrote image to file.
+	cout << "Writing image..." << endl;
+
+	if (!WriteImage(output, img)) {
+		cout << "Can\'t write to file." << endl;
+		return 0;
+	} // Wrote image to file.
 
 	return 0;
 }
