@@ -43,6 +43,9 @@ $(PROGRAM3): $(p3_obj)
 $(PROGRAM4): $(p4_obj)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(p4_obj) $(INCLUDES) $(LIBS_ALL)
 
+package:
+	(zip KHAN_HW2.zip *.h *.cc *.cpp Makefile README.txt)
+
 clean:
 	(rm -f *.o;)
 	(rm -f p1;)
