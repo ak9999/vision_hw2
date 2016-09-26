@@ -18,6 +18,9 @@ II. Bugs Encountered
 		changing all the background (0) pixels to (255). The image's grayscale
 		level is changed to the std::min(255, label) in the case that label is
 		larger than 255.
+	- p3 cannot draw a line, but will output recorded data to a database (text file).
+		p3 will only take two arguments, the input labled image and the database
+		you would like to store your data in.
 
 This does not seem to have any effect on the output.
 
@@ -30,6 +33,7 @@ III. Run Instructions
 	- ./p1 <input_image.pgm> <threshold> <output_image.pgm>
 		* The best threshold is between 120 and 125. I prefer 125.
 	- ./p2 <input_binary_image.pgm> <output_labeled_image.pgm>
+	- ./p3 <input_labled_image.pgm> <output_database.txt>
 
 	- To clean up directory, run `make clean`.
 		* This will also delete the compiled programs.
