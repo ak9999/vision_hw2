@@ -119,7 +119,7 @@ void GetABC(const int label, double area, int &x, int &y, Image &img, double &a,
 
 int main(int argc, char ** argv)
 {
-	if (argc != 3) {
+	if (argc != 4) {
 		cout <<
 		"Usage: " << argv[0]
 		<< " <input_labeled_image.pgm> <output_database.txt> <output_image.pgm>"
@@ -129,7 +129,7 @@ int main(int argc, char ** argv)
 
 	const string input(argv[1]);
 	const string database(argv[2]);
-	// const string output(argv[3]);
+	const string output(argv[3]);
 
 	ofstream out(database);
 
@@ -174,15 +174,15 @@ int main(int argc, char ** argv)
 		entry = ss.str();
 		out << entry << endl;
 
-		// DrawLine(xbar, ybar, xbar + E * cos(theta), ybar + E * sin(theta), 0, &img);
+		DrawLine(xbar, ybar, xbar + 30 * cos(theta), ybar + 30* sin(theta), 160, &img);
 	}
 
-	// cout << "Writing image..." << endl;
-	//
-	// if (!WriteImage(output, img)) {
-	// 	cout << "Can\'t write to file." << endl;
-	// 	return 0;
-	// } // Wrote image to file.
+	cout << "Writing image..." << endl;
+	
+	if (!WriteImage(output, img)) {
+		cout << "Can\'t write to file." << endl;
+		return 0;
+	} // Wrote image to file.
 
 	return 0;
 }
