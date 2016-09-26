@@ -119,7 +119,7 @@ void GetABC(const int label, double area, int &x, int &y, Image &img, double &a,
 
 int main(int argc, char ** argv)
 {
-	if (argc != 4) {
+	if (argc != 3) {
 		cout <<
 		"Usage: " << argv[0]
 		<< " <input_labled_image.pgm> <output_database.txt> <output_image.pgm>"
@@ -129,7 +129,7 @@ int main(int argc, char ** argv)
 
 	const string input(argv[1]);
 	const string database(argv[2]);
-	const string output(argv[3]);
+	// const string output(argv[3]);
 
 	ofstream out(database);
 
@@ -165,8 +165,8 @@ int main(int argc, char ** argv)
 
 		// Print debug info.
 		cout << "Label: " << l.first << " Centered at (x,y): (" << xbar << ", " << ybar << ")" << endl;
-		cout << "Label: " << l.first << " a: " << a
-		<< " b: " << b << " c: " << c << " atan2: " << atan2(b, a-c) << endl;
+		cout << "a: " << a << " b: " << b << " c: " << c << " atan2: "
+			 << atan2(b, a-c) << endl;
 		cout << "Theta: " << theta << endl;
 		cout << "Emin: " << E << endl << endl;
 
