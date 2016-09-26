@@ -10,6 +10,10 @@ Purpose:        Homework #2
 I. Parts Completed
 	- p1
 	- p2
+	- p3
+		* Output image does not work, but you can read the database file.
+	- p4
+		* Compiles, does not actually find similarities and does not output an image.
 
 II. Bugs Encountered
 	- When running p2 on a binary image, some objects are almost as dark as
@@ -19,14 +23,14 @@ II. Bugs Encountered
 		level is changed to the std::min(255, label) in the case that label is
 		larger than 255.
 	- p3 cannot draw a line, but will output recorded data to a database (text file).
-		p3 will only take two arguments, the input labled image and the database
+		p3 will only take two arguments, the input labeled image and the database
 		you would like to store your data in.
-
-This does not seem to have any effect on the output.
+	- p4 doesn't really work.
 
 	- The DisjointSets class' explicit constructor compared signed and unsigned
 		types together. This makes the compiler show a warning. I fixed this by
 		changing the for loop in the constructor from initializing an `int` to `size_t`.
+		It doesn't matter but I fixed it anyway.
 
 III. Run Instructions
 	- Run `make` to build.
@@ -34,6 +38,7 @@ III. Run Instructions
 		* The best threshold is between 120 and 125. I prefer 125.
 	- ./p2 <input_binary_image.pgm> <output_labeled_image.pgm>
 	- ./p3 <input_labled_image.pgm> <output_database.txt>
+	- ./p4 <input_labeled_image.pgm> <input_database.txt>
 
 	- To clean up directory, run `make clean`.
 		* This will also delete the compiled programs.
