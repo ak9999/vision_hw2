@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <cmath>
 #include <map> // for labels
 #include <list> // For storing database entries.
@@ -130,11 +131,15 @@ int main(int argc, char ** argv)
 	const string database(argv[2]);
 	const string output(argv[3]);
 
+	ofstream out(database);
+
 	Image img;
 	if (!ReadImage(input, &img)) {
 		cout << "Can\'t read file " << input << endl;
 		return 0;
 	} // Loaded image into memory.
+
+
 
 	size_t rows = img.num_rows();
 	size_t cols = img.num_columns();
@@ -150,6 +155,8 @@ int main(int argc, char ** argv)
 
 	for (auto l : labels)
 	{
+		string entry;
+		stringstream ss;
 		double theta = 0;
 		ObjectCenter(l.first, l.second, xbar, ybar, img);
 		GetABC(l.first, l.second, xbar, ybar, img, a, b, c);
@@ -163,15 +170,19 @@ int main(int argc, char ** argv)
 		cout << "Theta: " << theta << endl;
 		cout << "Emin: " << E << endl << endl;
 
+		ss << l.first << " " << xbar << " " << ybar << " " << E << " " << theta;
+		entry = ss.str();
+		out << entry << endl;
+
 		// DrawLine(xbar, ybar, xbar + E * cos(theta), ybar + E * sin(theta), 0, &img);
 	}
 
-	cout << "Writing image..." << endl;
-
-	if (!WriteImage(output, img)) {
-		cout << "Can\'t write to file." << endl;
-		return 0;
-	} // Wrote image to file.
+	// cout << "Writing image..." << endl;
+	//
+	// if (!WriteImage(output, img)) {
+	// 	cout << "Can\'t write to file." << endl;
+	// 	return 0;
+	// } // Wrote image to file.
 
 	return 0;
 }
